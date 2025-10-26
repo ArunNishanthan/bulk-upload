@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,16 +55,14 @@ public class BulkUploadController {
         return ResponseEntity.ok(JobStatusResponse.from(job));
     }
 
-    @PostMapping("/ingestions/{jobId}/reset")
-    public ResponseEntity<JobStatusResponse> resetJob(@PathVariable String jobId) {
-        IngestionJob job = bulkUploadService.resetJob(jobId);
-        if (job == null) {
+    @DeleteMapping("/ingestions/{jobId}")
+    public ResponseEntity<Void> deleteJob(@PathVariable String jobId) {
+        boolean deleted = bulkUploadService.deleteJob(jobId);
+        if (!deleted) {
             return ResponseEntity.notFound().build();
         }
-        log.info("Reset ingestion job={} to PENDING state", jobId);
-        return ResponseEntity.ok(JobStatusResponse.from(job));
+        return ResponseEntity.noContent().build();
     }
-
 
     @GetMapping("/account-products/export")
     public ResponseEntity<StreamingResponseBody> exportAccountProducts(

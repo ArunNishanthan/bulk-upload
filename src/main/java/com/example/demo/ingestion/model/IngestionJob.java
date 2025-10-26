@@ -27,9 +27,6 @@ public class IngestionJob {
     private long insertedRecords;
     private long duplicateRecords;
     private long invalidRecords;
-    private long processedRecords;
-    private long totalRecordsEstimate;
-    private int progressPercent;
     private boolean deleteExisting;
     private long deletedRecords;
     private String errorMessage;
